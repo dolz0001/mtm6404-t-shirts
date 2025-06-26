@@ -1,12 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>T-Shirts</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>T-Shirt Store</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      margin: 20px;
+      text-align: center;
+    }
+    .tshirt-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .tshirt-card {
+      background: white;
+      margin: 10px;
+      padding: 15px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      width: 250px;
+      box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+    }
+    .tshirt-card img {
+      width: 100%;
+      height: auto;
+    }
+    select, button {
+      margin-top: 10px;
+      padding: 5px;
+    }
+  </style>
 </head>
 <body>
-  
-  
+  <h1>T-Shirt Store</h1>
+  <div id="tshirt-list" class="tshirt-list"></div>
+
+  <script>
+    const tshirts = [
+      { title: 'Blue T-Shirt', image: 'images/blue-t-shirt.jpg', price: 7.99, stock: 4 },
+      { title: 'Bright Purple T-Shirt', image: 'images/bright-purple-t-shirt.jpg', price: 5.99, stock: 1 },
+      { title: 'Cobalt Blue T-Shirt', image: 'images/cobalt-blue-t-shirt.jpg', price: 9.99, stock: 5 },
+      { title: 'Green T-Shirt', image: 'images/green-t-shirt.jpg', price: 6.99, stock: 0 },
+      { title: 'Grey T-Shirt', image: 'images/blue-t-shirt.jpg', price: 4.99, stock: 2 },
+      { title: 'Light Green T-Shirt', image: 'images/light-green-t-shirt.jpg', price: 7.99, stock: 4 },
+      { title: 'Purple T-Shirt', image: 'images/purple-t-shirt.jpg', price: 7.99, stock: 0 },
+      { title: 'Red T-Shirt', image: 'images/red-t-shirt.jpg', price: 6.99, stock: 3 },
+      { title: 'Teal T-Shirt', image: 'images/teal-t-shirt.jpg', price: 7.99, stock: 2 }
+    ];
+
+    function renderTShirts() {
+      const list = document.getElementById('tshirt-list');
+      list.innerHTML = '';
+      tshirts.forEach((shirt, index) => {
+        const card = document.createElement('div');
+        card.className = 'tshirt-card';
+        card.innerHTML = `
+          <img src="${shirt.image}" alt="${shirt.title}" />
+          <h2>${shirt.title}</h2>
+          <p>$${shirt.price.toFixed(2)}</p>
+          <p>${shirt.stock > 0 ? `In stock: ${shirt.stock}` : '<strong>Out of Stock</strong>'}</p>
+          ${shirt.stock > 0 ? `
+            <select id="qty-${index}">
+              ${Array.from({length: shirt.stock}, (_, i) => `<option value="${i+1}">${i+1}</option>`).join('')}
+            </select>
+            <button onclick="buy(${index})">Buy</button>
+          ` : ''}
+        `;
+        list.appendChild(card);
+      });
+    }
+
+    function buy(index) {
+      const select = document.getElementById(`qty-${index}`);
+      const quantity = parseInt(select.value);
+      if (tshirts[index].stock >= quantity) {
+        tshirts[index].stock -= quantity;
+        renderTShirts();
+      }
+    }
+
+    renderTShirts();
+  </script>
 </body>
 </html>
